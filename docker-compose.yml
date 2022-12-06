@@ -1,0 +1,61 @@
+version: '3.5'
+
+services:
+  prometheus:
+      image: prom/prometheus:v2.37.0
+      container_name: monitoring_prometheus
+      restart: unless-stopped
+      volumes:
+        - ./prometheus:/etc/prometheus
+        - prometheus:/prometheus
+      command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--storage.tsdb.path=/prometheus'
+        - '--web.listen-address=:9710'
+      network_mode: host
+
+  node-exporter:
+      image: prom/node-exporter:v1.3.1
+      container_name: monitoring_node_exporter
+      restart: unless-stopped
+      volumes:
+        - /proc:/host/proc:ro
+        - /sys:/host/sys:ro
+        - /:/rootfs:ro
+      command:
+        - '--path.procfs=/host/proc'
+        - '--path.rootfs=/rootfs'
+        - '--path.sysfs=/host/sys'
+        - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      network_mode: host
+      pid: host
+
+  cadvisor:
+      image: google/cadvisor:v0.33.0
+      container_name: monitoring_cadvisor
+      restart: unless-stopped
+      volumes:
+        - /:/rootfs:ro
+        - /var/run:/var/run:rw
+        - /sys:/sys:ro
+        - /var/lib/docker/:/var/lib/docker:ro
+      command:
+        - '-port=9712'
+      network_mode: host
+
+    
+  grafana:
+      image: grafana/grafana:9.0.4
+      container_name: monitoring_grafana
+      restart: unless-stopped
+      volumes:
+        - monitor_grafana:/var/lib/grafana
+      network_mode: host
+      environment:
+        - GF_SECURITY_ADMIN_USER=admin
+        - GF_SECURITY_ADMIN_PASSWORD=admin
+
+
+volumes:
+  monitor_grafana:
+  prometheus:
