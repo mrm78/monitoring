@@ -10,6 +10,7 @@ services:
         - prometheus:/prometheus
       command:
         - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--web.config.file=/etc/prometheus/web-config.yml'
         - '--storage.tsdb.path=/prometheus'
         - '--web.listen-address=:9710'
       network_mode: host
