@@ -32,7 +32,7 @@ services:
       pid: host
 
   cadvisor:
-      image: google/cadvisor:v0.33.0
+      image: gcr.io/cadvisor/cadvisor
       container_name: monitoring_cadvisor
       restart: unless-stopped
       volumes:

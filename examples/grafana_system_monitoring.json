@@ -99,7 +99,7 @@
             "type": "prometheus",
             "uid": "${data_source}"
           },
-          "expr": "time() - node_boot_time_seconds{app=\"global\"}",
+          "expr": "time() - node_boot_time_seconds{app=\"node-exporter\"}",
           "hide": false,
           "intervalFactor": 2,
           "legendFormat": "",
@@ -344,7 +344,7 @@
             "type": "prometheus",
             "uid": "${data_source}"
           },
-          "expr": "((node_memory_MemTotal_bytes{app=\"global\"} - node_memory_MemAvailable_bytes{app=\"global\"}) / node_memory_MemTotal_bytes{app=\"global\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{app=\"node-exporter\"} - node_memory_MemAvailable_bytes{app=\"node-exporter\"}) / node_memory_MemTotal_bytes{app=\"node-exporter\"}) * 100",
           "intervalFactor": 2,
           "refId": "A",
           "step": 1800
@@ -425,7 +425,7 @@
             "type": "prometheus",
             "uid": "${data_source}"
           },
-          "expr": "(node_memory_SwapTotal_bytes{app=\"global\"} - node_memory_SwapFree_bytes{app=\"global\"})",
+          "expr": "(node_memory_SwapTotal_bytes{app=\"node-exporter\"} - node_memory_SwapFree_bytes{app=\"node-exporter\"})",
           "intervalFactor": 2,
           "legendFormat": "",
           "refId": "A",
@@ -860,7 +860,7 @@
             "type": "prometheus",
             "uid": "${data_source}"
           },
-          "expr": "node_load1 / count by(job, instance)(count by(job, instance, cpu)(node_cpu_seconds_total))",
+          "expr": "node_load1 / count by(app, job, instance)(count by(app, job, instance, cpu)(node_cpu_seconds_total))",
           "intervalFactor": 2,
           "refId": "A",
           "step": 600
@@ -1866,7 +1866,7 @@
             "uid": "${data_source}"
           },
           "expr": "container_memory_usage_bytes{name=~\"$containergroup.+\"}",
-          "hide": true,
+          "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "refId": "B",
@@ -1973,7 +1973,7 @@
             "uid": "${data_source}"
           },
           "expr": "container_memory_usage_bytes{name=~\"$containergroup.+\"}",
-          "hide": true,
+          "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "refId": "B",
@@ -2066,7 +2066,7 @@
             "uid": "${data_source}"
           },
           "expr": "sum(container_spec_memory_limit_bytes{name=~\"$containergroup.+\"} - container_memory_usage_bytes{name=~\"$containergroup.+\"}) by (name) ",
-          "hide": true,
+          "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "",
@@ -2103,7 +2103,7 @@
       "type": "table-old"
     }
   ],
-  "refresh": "5m",
+  "refresh": false,
   "schemaVersion": 36,
   "style": "dark",
   "tags": [],
@@ -2112,9 +2112,13 @@
       {
         "allValue": ".+",
         "current": {
-          "selected": true,
-          "text": [],
-          "value": []
+          "selected": false,
+          "text": [
+            "dev"
+          ],
+          "value": [
+            "dev"
+          ]
         },
         "datasource": {
           "type": "prometheus",
@@ -2263,7 +2267,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -2294,6 +2298,6 @@
   "timezone": "browser",
   "title": "Docker and system monitoring",
   "uid": "HEjRreR4k",
-  "version": 2,
+  "version": 5,
   "weekStart": ""
 }
